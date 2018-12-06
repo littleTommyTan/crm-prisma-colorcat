@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "EditorConfig.editorconfig",
+    "eg2.tslint",
+    "esbenp.prettier-vscode",
+    "mike-co.import-sorter",
+    "teabyii.ayu",
+    "prisma.vscode-graphql",
+    "pkief.material-icon-theme",
+    "peterjausovec.vscode-docker"
+  ]
+}

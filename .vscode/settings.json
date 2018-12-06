@@ -1,0 +1,28 @@
+{
+  "editor.formatOnSave": true,
+  "editor.rulers": [120],
+  "eslint.packageManager": "yarn",
+  "files.exclude": {
+    "**/*.meta": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "library/": true,
+    "local/": true,
+    "temp/": true
+  },
+  "importSorter.generalConfiguration.sortOnBeforeSave": true,
+  "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.type":
+    "newLineEachExpressionAfterCountLimit",
+  "importSorter.importStringConfiguration.tabSize": 2,
+  "importSorter.importStringConfiguration.trailingComma": "multiLine",
+  "search.exclude": {
+    "**/bower_components": true,
+    "**/node_modules": true,
+    "build/": true,
+    "library/": true,
+    "temp/": true
+  },
+  "tslint.autoFixOnSave": true,
+  "tslint.packageManager": "yarn",
+  "window.title": "${activeEditorMedium}${separator}${rootName}"
+}

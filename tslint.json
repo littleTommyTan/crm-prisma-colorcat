@@ -1,0 +1,25 @@
+{
+  "rules": {
+    "adjacent-overload-signatures": true,
+    // "ban": [true, { "name": ["*", "forEach"], "message": "Use for...of loop instead." }],
+    "max-line-length": [
+      true,
+      {
+        "ignore-pattern": "[`'\"]"
+      }
+    ],
+    "deprecation": true,
+    "member-ordering": false,
+    "jsdoc-format": false,
+    "variable-name": [true, "ban-keywords", "allow-leading-underscore"],
+    "no-floating-promises": false,
+    "no-for-in-array": true,
+    "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
+    "no-unused-variable": false,
+    "no-use-before-declare": false,
+    "only-arrow-functions": [true, "allow-declarations"],
+    "prefer-template": true,
+    "prefer-switch": true,
+    "prefer-for-of": true
+  }
+}

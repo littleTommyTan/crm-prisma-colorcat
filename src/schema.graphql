@@ -1,0 +1,23 @@
+type Query {
+  playlist(songListId: String!): [Song!]!
+  doubanIntheater: [Movie!]!
+}
+type Song {
+  id: String!
+  name: String!
+  artist: String!
+  url: String!
+  cover: String!
+  lrc: String!
+}
+type Movie {
+  id: ID!
+  movieId: String!
+  title: String!
+  numRaters: String!
+  rating: String!
+  genres: [String!]!
+  summary: String!
+  image: String!
+  detailLink: String!
+}

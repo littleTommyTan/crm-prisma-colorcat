@@ -1,0 +1,11 @@
+type Movie {
+  id: ID! @unique
+  movieId: String!
+  title: String!
+  numRaters: String!
+  rating: String!
+  genres: [String!]!
+  summary: String!
+  image: String!
+  detailLink: String!
+}
