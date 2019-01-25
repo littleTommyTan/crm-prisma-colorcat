@@ -1,11 +1,353 @@
-type Movie {
+# 客户主表
+type UserBasic {
   id: ID! @unique
-  movieId: String!
-  title: String!
-  numRaters: String!
-  rating: String!
-  genres: [String!]!
-  summary: String!
-  image: String!
-  detailLink: String!
+  mobile: String! #手机号
+  name: String! #姓名
+  sex: String! #性别
+  age: String! #年龄
+  birthYear: String! #出生年份
+  birthDay: String #出生年月日
+  where: String! #区域（二级联动）
+  bigFrom: String! #大来源
+  qq: String #qq号
+  wechat: String #微信号
+  categoryFromAd: String #广告来源之类别
+  planFromAd: String #广告来源之计划
+  categoryFromMarket: String #市场来源之类型
+  agencyFromMarket: String #市场来源之机构
+  vipLevel: String #vip等级
+  vipID: String #会员卡号
+  idCard: String #身份证号
+  email: String
+  secondPhoneNum: String #第二联系电话
+  introducer: String #介绍人
+  education: String #学历
+  career: String #职业
+  marriage: String #婚姻状况
+  phoneModel: String #手机型号
+  carModel: String #汽车型号
+  addressDetail: String #具体地址
+  medicalHistory: String #病史
+  reMark: String #备注
+  mainProject: String
+  focusProject: String
+  toBeDevelopedProject: String
+  haveDoneInThisHospital: String
+  haveDoneInAnotherHospital: String
+  flowBalance: Int @default(value: 0)
+  freezingBalance: Int @default(value: 0)
+  tag: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editorId: ID
+  editor: String
+  editedAt: String
+  updatedAt: DateTime!
+}
+#咨询记录
+type ConsultingRecord {
+  id: ID! @unique
+  user: UserBasic!
+  advisoryWay: String
+  advisoryResult: String
+  advisorySummary: String
+  advisoryDetail: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editorId: ID
+  editor: String
+  editedAt: String
+  updatedAt: DateTime!
+}
+#预约
+type BookingRecord {
+  id: ID! @unique
+  user: UserBasic!
+  consultationRecord: ConsultingRecord
+  toHospitalCate: String!
+  bookingStatus: Int #0已预约 1已到院 2已接诊 3已开单
+  diagnosisResult: String #接诊结果
+  diagnosisSummary: String #接诊小结
+  diagnosisDetail: String #接诊详情
+  time: String!
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editorId: ID
+  editor: String
+  editedAt: String
+  #流水
+  frontDesk: String
+  frontDeskId: ID
+  assistant: String
+  assistantId: ID
+  doctor: String
+  doctorId: ID
+  updatedAt: DateTime!
+}
+#字典
+type Dictionary {
+  id: ID! @unique
+  itemName: String!
+  itemSecondName: String @default(value: "默认") #双语
+  itemParentId: String
+  itemAvailiable: Boolean!
+  rootIndex: Int
+  sortIndex: Int @default(value: 0)
+  ps: String
+  createdAt: DateTime!
+  creator: String
+  creatorId: ID
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#管理员
+type Admin {
+  id: ID! @unique
+  name: String!
+  userName: String! @unique
+  password: String!
+  departmentName: String!
+  departmentId: String!
+  availiable: Boolean!
+  routePages: [Int!]! #管理员权限
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#权限组
+type Department {
+  id: ID! @unique
+  name: String! @unique
+  routePages: [Int!]! #权限设置
+  parentId: ID
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#广告类别
+type Ad {
+  id: ID! @unique
+  typeName: String!
+  plan: String!
+  availiable: Boolean!
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#广告消费记录
+type AdConsumptionRec {
+  id: ID! @unique
+  typeName: String
+  plan: String
+  displayAmount: Int
+  clickAmount: Int
+  consumption: Int
+  time: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#咨询工作
+type ConsultationWork {
+  id: ID! @unique
+  consultationType: String!
+  dialogA: Int!
+  dialogB: Int!
+  dialogC: Int!
+  workTime: String!
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#机构
+type Agency {
+  id: ID! @unique
+  agencyName: String
+  agencyType: String
+  agencyLevel: String
+  coStatus: String
+  availiable: Boolean
+  agencyHead: String
+  headTel: String
+  agencyContact: String
+  contactTel: String
+  introducer: String
+  whereLevel1: String
+  whereLevel2: String
+  whereDetail: String
+  commission: Float #佣金
+  dealTime: String
+  marketor: String
+  detail: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+# 回访任务
+type ReturnVisitTask {
+  id: ID! @unique
+  isCompleted: Boolean @default(value: false) #任务完成状态
+  name: String #客户名称
+  userId: ID #客户Id
+  tel: String #客户电话
+  type: String #回访类型
+  topic: String #回访主题
+  status: String #回访状态
+  returnVisitDate: String #回访日期
+  returnVisitor: String #回访人
+  returnVisitorId: String #回访人id
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# 回访记录
+type ReturnVisitRecord {
+  id: ID! @unique
+  name: String #客户名称
+  userId: ID #客户Id
+  taskId: ID #回访任务id  ***
+  type: String #回访类型
+  topic: String #回访主题
+  result: String #回访结果
+  way: String #回访方式
+  recordDetail: String #回访详情
+  flow: String #客户流向
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#消费单
+type Bill {
+  id: ID! @unique
+  createdAt: DateTime!
+  user: UserBasic!
+  bookingRecord: BookingRecord!
+  idCode: String @unique #订单号
+  totalPrice: Int
+  billDetail: [String!]!
+  paid: Int @default(value: 0)
+  paymentStatus: Int # 0未收费 1已付订金 2已付部分款 3已付全款 4"已全额退款" 5已部分退款
+  discount: Float
+  flowBalance: Int @default(value: 0) #使用过的活动余额
+  freezingBalance: Int @default(value: 0) #使用过的冻结余额
+  deposit: Int @default(value: 0) #订金
+  payback: Int @default(value: 0) #退费（正确情况下只更新一次）
+  isOnlyDepositBill: Boolean #仅付订金的单子为true
+  isCompleted: Int #0未完成，1已完成，2退款
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+#付款记录主表
+type Payment {
+  id: ID! @unique
+  bill: Bill
+  paymentType: Int # 0付定金 1付部分款 2付全款 3补欠款 4补订金余款 5全额退款 6部分退款
+  shouldPay: Int
+  paymentWay: Int @default(value: -1) # 0为现金、1为刷卡、2为其它
+  confirmed: Boolean @default(value: false) #确认收费
+  balance: Int @default(value: 0) #抵扣余额
+  paymentPS: String #备注
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+
+#消费单辅表
+type BillDetail {
+  id: ID! @unique
+  createdAt: DateTime!
+  billId: String
+  project: String
+  unitPrice: Int
+  quantifier: String #量词
+  amount: Int
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+
+# 手术安排
+type Surgery {
+  id: ID! @unique
+  bill: Bill!
+  surgeryStatus: Int #0待手术 1已完成 2已取消
+  doctor: String
+  reservationTime: String
+  surgeryName: String
+  surgeryPS: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+
+# 疗程安排
+type Treatment {
+  id: ID! @unique
+  bill: Bill!
+  treatmentStatus: Int #0待治疗 1治疗中 2治疗完成 3治疗异常结束
+  doctor: String
+  treatmentName: String
+  currentTreatmentTimes: Int
+  treatmentTimes: Int
+  treatmentPS: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
 }

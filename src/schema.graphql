@@ -1,23 +1,767 @@
-type Query {
-  playlist(songListId: String!): [Song!]!
-  doubanIntheater: [Movie!]!
-}
-type Song {
-  id: String!
+# Common
+scalar DateTime
+scalar CustomReturn
+scalar CustomBillDetail
+scalar FormData
+scalar CustomParams
+
+type AuthPayload {
+  token: String!
   name: String!
-  artist: String!
-  url: String!
-  cover: String!
-  lrc: String!
+  userId: String!
+  routePages: [Int!]!
+  departmentId: String!
 }
-type Movie {
+
+type MutationResult {
+  success: Boolean!
+}
+type Mutation {
+  # 用户
+  rechargeBalance(id: ID!, balance: Int): UserBasic!
+  addUser(
+    name: String! #姓名
+    sex: String! #性别
+    birthYear: String! #出生年份
+    age: String!
+    where: String! #区域（二级联动）
+    bigFrom: String! #大来源
+    mobile: String #手机号
+    qq: String #qq号
+    wechat: String #微信号
+    birthDay: String #出生年月日
+    categoryFromAd: String #广告来源之类别
+    planFromAd: String #广告来源之计划
+    categoryFromMarket: String #市场来源之类型
+    agencyFromMarket: String #市场来源之机构
+    vipLevel: String #vip等级
+    vipID: String #会员卡号
+    idCard: String #身份证号
+    email: String
+    secondPhoneNum: String #第二联系电话
+    introducer: String #介绍人
+    education: String
+    career: String #职业
+    marriage: String #婚姻状况
+    phoneModel: String #手机型号
+    carModel: String #汽车型号
+    addressDetail: String #
+    medicalHistory: String #病史
+    reMark: String #备注
+    mainProject: String #主项目
+    focusProject: String #关注项目
+    toBeDevelopedProject: String #待开发项目
+    haveDoneInThisHospital: String #本院已做项目
+    haveDoneInAnotherHospital: String #他院已做项目
+    tag: String #客户标签
+  ): CustomReturn! #{ success: true, userId: user.id }
+  updateUserBasic(
+    id: ID!
+    name: String #姓名
+    sex: String #性别
+    birthYear: String #出生年份
+    age: String
+    where: String #区域（二级联动）
+    bigFrom: String #大来源
+    mobile: String #手机号
+    qq: String #qq号
+    wechat: String #微信号
+    birthDay: String #出生年月日
+    categoryFromAd: String #广告来源之类别
+    planFromAd: String #广告来源之计划
+    categoryFromMarket: String #市场来源之类型
+    agencyFromMarket: String #市场来源之机构
+    vipLevel: String #vip等级
+    vipID: String #会员卡号
+    idCard: String #身份证号
+    email: String
+    secondPhoneNum: String #第二联系电话
+    education: String
+    introducer: String #介绍人
+    career: String #职业
+    marriage: String #婚姻状况
+    phoneModel: String #手机型号
+    carModel: String #汽车型号
+    addressDetail: String #具体地址
+    medicalHistory: String #病史
+    reMark: String #备注
+    mainProject: String #主项目
+    focusProject: String #关注项目
+    toBeDevelopedProject: String #待开发项目
+    haveDoneInThisHospital: String #本院已做项目
+    haveDoneInAnotherHospital: String #他院已做项目
+    tag: String #客户标签
+    blance: Int #余额
+  ): UserBasic!
+  deleteUser(id: ID!): MutationResult!
+  acceptAdvancedForm(formData: FormData!): CustomReturn!
+
+  addConsultingRecord(
+    userId: ID!
+    advisoryWay: String #咨询方式
+    advisoryResult: String #咨询结果
+    advisorySummary: String #咨询总结
+    advisoryDetail: String #咨询详情):MutationResult!
+  ): MutationResult!
+  addAd(typeName: String!, plan: String!, availiable: Boolean!): MutationResult!
+  updateAd(
+    id: String!
+    typeName: String!
+    plan: String!
+    availiable: Boolean!
+  ): MutationResult!
+  login(userName: String!, password: String!): AuthPayload!
+  autoLogin(token: String!): AuthPayload!
+
+  #预约记录
+  addBookingRecordWithConsultation(customParams: CustomParams!): BookingRecord!
+  addBookingRecord(
+    userId: ID!
+    toHospitalCate: String! #来院类别
+    time: String! #预到时间
+    bookingStatus: Int!
+    #流水
+    frontDesk: String
+    frontDeskId: ID
+    assistant: String
+    assistantId: ID
+    doctor: String
+    doctorId: ID
+  ): BookingRecord
+  updateBookingRecord(
+    id: ID!
+    toHospitalCate: String!
+    bookingStatus: Int
+    time: String!
+    diagnosisResult: String #接诊结果
+    diagnosisSummary: String #接诊小结
+    diagnosisDetail: String #接诊详情
+    #流水
+    frontDesk: String
+    frontDeskId: ID
+    assistant: String
+    assistantId: ID
+    doctor: String
+    doctorId: ID
+  ): BookingRecord
+  deleteBookingRecord(id: ID!): BookingRecord
+
+  #字典
+  updateDictionaryItem(
+    id: String!
+    itemName: String
+    itemSecondName: String
+    itemAvailiable: Boolean
+    sortIndex: Int
+    rootIndex: Int
+    ps: String
+  ): Dictionary
+  addDictionaryItem(
+    itemName: String!
+    itemSecondName: String
+    itemParentId: String
+    itemAvailiable: Boolean!
+    sortIndex: Int
+    rootIndex: Int
+    ps: String
+  ): Dictionary
+  deleteDictionaryItem(id: String!): Dictionary
+
+  #广告消费记录
+  addAdConsumptionRec(
+    typeName: String
+    plan: String
+    displayAmount: Int
+    clickAmount: Int
+    consumption: Int
+    time: String
+    editor: String
+  ): AdConsumptionRec!
+  deleteAdConsumptionRec(id: String!): AdConsumptionRec!
+  updateAdConsumptionRec(
+    id: String!
+    typeName: String
+    plan: String
+    displayAmount: Int
+    clickAmount: Int
+    consumption: Int
+    time: String
+    editor: String
+  ): AdConsumptionRec!
+
+  #咨询工作量
+  addConsultationWork(
+    consultationType: String!
+    dialogA: Int!
+    dialogB: Int!
+    dialogC: Int!
+    workTime: String!
+  ): ConsultationWork!
+  deleteConsultationWork(id: String!): ConsultationWork!
+  updateConsutationWork(
+    id: String!
+    consultationType: String!
+    dialogA: Int!
+    dialogB: Int!
+    dialogC: Int!
+    workTime: String!
+  ): ConsultationWork!
+
+  #系统用户权限
+  signup(
+    name: String!
+    userName: String!
+    password: String!
+    departmentId: String!
+  ): Admin!
+  deleteAdmin(id: String!): Admin!
+  updateAdmin(
+    id: String!
+    name: String!
+    password: String!
+    availiable: Boolean!
+    departmentId: String!
+  ): Admin!
+  updateAdminAvailiable(id: String!, availiable: Boolean): Admin!
+
+  #部门 mutations
+  addDepartment(
+    name: String!
+    routePages: [Int!]!
+    parentId: String!
+  ): Department!
+  updateDepartment(
+    id: String!
+    name: String!
+    routePages: [Int!]!
+    parentId: String!
+  ): Department!
+  deleteDepartment(id: String!): Department!
+
+  #机构
+  addAgency(
+    agencyName: String
+    agencyType: String
+    agencyLevel: String
+    coStatus: String
+    availiable: Boolean
+    agencyHead: String
+    headTel: String
+    agencyContact: String
+    contactTel: String
+    introducer: String
+    whereLevel1: String
+    whereLevel2: String
+    whereDetail: String
+    commission: Float #佣金
+    dealTime: String
+    marketor: String
+    detail: String
+  ): Agency!
+  deleteAgency(id: String!): Agency!
+  updateAgency(
+    id: String!
+    agencyName: String
+    agencyType: String
+    agencyLevel: String
+    coStatus: String
+    availiable: Boolean
+    agencyHead: String
+    headTel: String
+    agencyContact: String
+    contactTel: String
+    introducer: String
+    whereLevel1: String
+    whereLevel2: String
+    whereDetail: String
+    commission: Float #佣金
+    dealTime: String
+    marketor: String
+    detail: String
+  ): Agency!
+
+  #回访任务
+  addReturnVisitTask(
+    name: String #客户名称
+    userId: ID #客户Id
+    tel: String #客户电话
+    type: String #回访类型
+    topic: String #回访主题
+    status: String #回访状态
+    returnVisitDate: String #回访日期
+    returnVisitor: String #回访人
+    returnVisitorId: String #回访人id
+  ): ReturnVisitTask!
+  updateReturnVisitTask(
+    id: ID!
+    name: String #客户名称
+    userId: ID #客户Id
+    tel: String #客户电话
+    type: String #回访类型
+    topic: String #回访主题
+    status: String #回访状态
+    returnVisitDate: String #回访日期
+    returnVisitor: String #回访人
+    returnVisitorId: String #回访人id
+  ): ReturnVisitTask!
+  deleteReturnVisitTask(id: ID!): ReturnVisitTask!
+  #回访记录
+  addReturnVisitRecord(
+    taskId: ID #回访任务id  ***
+    recordDetail: String #回访详情
+    name: String #客户名称
+    userId: ID #客户Id
+    type: String #回访类型
+    topic: String #回访主题
+    result: String #回访结果
+    way: String #回访方式
+    flow: String #客户流向
+  ): ReturnVisitRecord!
+  updateReturnVisitRecord(
+    id: ID!
+    name: String #客户名称
+    userId: ID #客户Id
+    taskId: ID #回访任务id  ***
+    type: String #回访类型
+    topic: String #回访主题
+    result: String #回访结果
+    way: String #回访方式
+    recordDetail: String #回访详情
+    flow: String #客户流向
+  ): ReturnVisitRecord!
+  deleteReturnVisitRecord(id: ID!): ReturnVisitRecord!
+
+  #消费单
+  addBill(
+    userId: ID!
+    bookingRecordId: ID!
+    discount: Float
+    totalPrice: Int
+    billDetail: CustomBillDetail
+    paymentType: Int
+    shouldPay: Int
+    usedBalance: Int
+    depositReadyIn: Int
+    isOnlyDepositBill: Boolean #仅付订金的单子为true
+  ): Bill!
+  deleteBill(id: String!): Bill!
+  pay(id: ID!, paymentWay: Int!): Payment!
+
+  #消费记录添加
+  addPayment(
+    billId: ID!
+    balance: Int
+    shouldPay: Int
+    paymentType: Int
+    paymentPS: String
+  ): Payment
+
+  #退款
+  payback(id: ID): Payment!
+
+  #添加手术
+  addSurgery(
+    billId: ID
+    doctor: String
+    reservationTime: String
+    surgeryName: String
+    surgeryPS: String
+  ): Surgery!
+  #添加手术
+  addTreatment(
+    billId: ID
+    doctor: String
+    treatmentName: String
+    treatmentTimes: Int
+    treatmentPS: String
+  ): Treatment!
+  #修改手术
+  editSurgery(
+    id: ID!
+    surgeryStatus: Int #0待手术 1已完成 2已取消
+    doctor: String
+    reservationTime: String
+    surgeryPS: String
+    surgeryName: String
+  ): Surgery!
+  #修改疗程
+  editTreatment(
+    id: ID!
+    treatmentStatus: Int #0待治疗 1治疗中 2治疗完成 3治疗异常结束
+    doctor: String
+    treatmentName: String
+    currentTreatmentTimes: Int
+    treatmentTimes: Int
+    treatmentPS: String
+  ): Treatment!
+  #执行疗程
+  opTreatment(id: ID!): Treatment!
+}
+
+type Query {
+  userBasicById(id: ID!): UserBasic!
+  userBasics: [UserBasic!]!
+  consultingRecords: [ConsultingRecord!]!
+  bookingRecords: [BookingRecord!]!
+  dictionaries: [Dictionary!]!
+  ads: [Ad!]!
+  adConsumptions: [AdConsumptionRec!]!
+  consultationWorks: [ConsultationWork!]!
+  admins: [Admin!]!
+  departments: [Department!]!
+  usersDetailWDView: CustomReturn
+  agencies: [Agency!]!
+  returnVisitRecords: [ReturnVisitRecord!]!
+  returnVisitTasks: [ReturnVisitTask!]!
+  bills: [Bill!]!
+  billsDetails: [BillDetail!]!
+  billsDetaildsByBillId(id: ID!): [BillDetail!]!
+  payments: [Payment!]!
+  surgeries: [Surgery!]!
+  treatments: [Treatment!]!
+  todaysConsultationWorks(
+    dateFrom: String!
+    dateTo: String!
+    adminId: ID
+  ): CustomReturn
+}
+
+#实体 datamodel
+
+# 客户主表
+type UserBasic {
   id: ID!
-  movieId: String!
-  title: String!
-  numRaters: String!
-  rating: String!
-  genres: [String!]!
-  summary: String!
-  image: String!
-  detailLink: String!
+  mobile: String! #手机号
+  name: String! #姓名
+  sex: String! #性别
+  age: String! #年龄
+  birthYear: String! #出生年份
+  birthDay: String #出生年月日
+  where: String! #区域（二级联动）
+  bigFrom: String! #大来源
+  qq: String #qq号
+  wechat: String #微信号
+  categoryFromAd: String #广告来源之类别
+  planFromAd: String #广告来源之计划
+  categoryFromMarket: String #市场来源之类型
+  agencyFromMarket: String #市场来源之机构
+  vipLevel: String #vip等级
+  vipID: String #会员卡号
+  idCard: String #身份证号
+  email: String
+  secondPhoneNum: String #第二联系电话
+  education: String #学历
+  introducer: String #介绍人
+  career: String #职业
+  marriage: String #婚姻状况
+  phoneModel: String #手机型号
+  carModel: String #汽车型号
+  addressDetail: String #具体地址
+  medicalHistory: String #病史
+  reMark: String #备注
+  mainProject: String
+  focusProject: String
+  toBeDevelopedProject: String
+  haveDoneInThisHospital: String
+  haveDoneInAnotherHospital: String
+  flowBalance: Int
+  freezingBalance: Int
+  tag: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editorId: ID
+  editor: String
+  editedAt: String
+}
+#咨询记录
+type ConsultingRecord {
+  id: ID!
+  user: UserBasic!
+  advisoryWay: String
+  advisoryResult: String
+  advisorySummary: String
+  advisoryDetail: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editorId: ID
+  editor: String
+  editedAt: String
+}
+#预约
+type BookingRecord {
+  id: ID!
+  user: UserBasic!
+  consultationRecord: ConsultingRecord
+  toHospitalCate: String!
+  bookingStatus: Int
+  time: String!
+  diagnosisResult: String #接诊结果
+  diagnosisSummary: String #接诊小结
+  diagnosisDetail: String #接诊详情
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editorId: ID
+  editor: String
+  editedAt: String
+  #流水
+  frontDesk: String
+  frontDeskId: ID
+  assistant: String
+  assistantId: ID
+  doctor: String
+  doctorId: ID
+}
+#字典
+type Dictionary {
+  id: ID!
+  itemName: String!
+  itemSecondName: String #双语
+  itemParentId: String
+  itemAvailiable: Boolean!
+  rootIndex: Int
+  sortIndex: Int
+  ps: String
+  createdAt: DateTime!
+  creator: String
+  creatorId: ID
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#管理员
+type Admin {
+  id: ID!
+  name: String!
+  userName: String!
+  password: String!
+  departmentName: String!
+  departmentId: String!
+  availiable: Boolean!
+  routePages: [Int!]! #管理员权限
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#权限组
+type Department {
+  id: ID!
+  name: String!
+  routePages: [Int!]! #权限设置
+  parentId: ID
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#广告类别
+type Ad {
+  id: ID
+  typeName: String
+  plan: String
+  availiable: Boolean
+  createdAt: DateTime
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#广告消费记录
+type AdConsumptionRec {
+  id: ID
+  typeName: String
+  plan: String
+  displayAmount: Int
+  clickAmount: Int
+  consumption: Int
+  time: String
+  createdAt: DateTime
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#咨询工作
+type ConsultationWork {
+  id: ID
+  consultationType: String
+  dialogA: Int
+  dialogB: Int
+  dialogC: Int
+  workTime: String
+  createdAt: DateTime
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#消费单
+type Bill {
+  id: ID!
+  createdAt: DateTime!
+  user: UserBasic!
+  bookingRecord: BookingRecord!
+  idCode: String
+  totalPrice: Int
+  billDetail: [String!]!
+  paid: Int
+  paymentStatus: Int
+  discount: Float
+  flowBalance: Int #使用过的活动余额
+  freezingBalance: Int #使用过的冻结余额
+  deposit: Int #订金
+  isOnlyDepositBill: Boolean #仅付订金的单子为true
+  isCompleted: Int #消费单完成状态：0未完成，1已完成，2退款
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#消费单辅表
+type BillDetail {
+  id: ID!
+  createdAt: DateTime!
+  billId: String!
+  project: String
+  unitPrice: Int
+  quantifier: String #量词
+  amount: Int
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+#机构
+type Agency {
+  id: ID
+  agencyName: String
+  agencyType: String
+  agencyLevel: String
+  coStatus: String
+  availiable: Boolean
+  agencyHead: String
+  headTel: String
+  agencyContact: String
+  contactTel: String
+  introducer: String
+  whereLevel1: String
+  whereLevel2: String
+  whereDetail: String
+  commission: Float #佣金
+  dealTime: String
+  marketor: String
+  detail: String
+  createdAt: DateTime
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+
+# 回访任务
+type ReturnVisitTask {
+  id: ID!
+  isCompleted: Boolean #任务完成状态
+  name: String #客户名称
+  userId: ID #客户Id
+  tel: String #客户电话
+  type: String #回访类型
+  topic: String #回访主题
+  status: String #回访状态
+  returnVisitDate: String #回访日期
+  returnVisitor: String #回访人
+  returnVisitorId: String #回访人id
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# 回访记录
+type ReturnVisitRecord {
+  id: ID!
+  name: String #客户名称
+  userId: ID #客户Id
+  taskId: ID #回访任务id  ***
+  type: String #回访类型
+  topic: String #回访主题
+  result: String #回访结果
+  way: String #回访方式
+  recordDetail: String #回访详情
+  flow: String #客户流向
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+  updatedAt: DateTime!
+}
+
+#付款记录主表
+type Payment {
+  id: ID!
+  bill: Bill
+  paymentType: Int #0为
+  shouldPay: Int
+  paymentWay: Int # 0为现金、1为刷卡、2为其它
+  confirmed: Boolean #确认收费
+  balance: Int #抵扣余额
+  paymentPS: String #备注
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+
+# 手术安排
+type Surgery {
+  id: ID!
+  bill: Bill!
+  surgeryStatus: Int #0待手术 1已完成 2已取消
+  doctor: String
+  reservationTime: String
+  surgeryName: String
+  surgeryPS: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
+}
+# 疗程安排
+type Treatment {
+  id: ID!
+  bill: Bill!
+  treatmentStatus: Int #0待治疗 1治疗中 2治疗完成 3治疗异常结束
+  doctor: String
+  treatmentName: String
+  currentTreatmentTimes: Int
+  treatmentTimes: Int
+  treatmentPS: String
+  createdAt: DateTime!
+  creatorId: ID
+  creator: String
+  editor: String
+  editorId: ID
+  editedAt: String
 }
