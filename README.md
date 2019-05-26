@@ -1,5 +1,5 @@
-# crm-prisma-colorcat
+# crm-prisma-demo
 
-easily deploy by following cli :
+easily deploy by following:
 
 1.npm run build
